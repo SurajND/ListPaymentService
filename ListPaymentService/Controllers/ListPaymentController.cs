@@ -11,28 +11,25 @@ using System.Net;
 using System.Web.Http.Cors;
 
 namespace ListPaymentService.Controllers
-{
-    public class ListPaymentController : Controller
+{    
+    // GET: ListPayment
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    public class ListPaymentController : ApiController
     {
-        // GET: ListPayment
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public class DKPaymentController : ApiController
+        ListPaymentResponse payments = null;
+        [System.Web.Http.HttpPost]
+        public async Task<IHttpActionResult> MakePayment([FromBody] ListPaymentRequest payment)
         {
-            ListPaymentResponse payments = null;
-            [System.Web.Http.HttpPost]
-            public async Task<IHttpActionResult> MakePayment([FromBody] ListPaymentRequest payment)
+            try
             {
-                try
-                {
-                    PaymentService client = new PaymentService();
-                    payments = await client.MakePayment(payment);
-                }
-                catch (Exception)
-                {
-                    return StatusCode(HttpStatusCode.BadRequest);
-                }
-                return Ok(payments);
+                PaymentService client = new PaymentService();
+                payments = await client.MakePayment(payment);
             }
+            catch (Exception)
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            return Ok(payments);
         }
-    }
+    }    
 }

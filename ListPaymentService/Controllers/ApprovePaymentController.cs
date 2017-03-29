@@ -12,28 +12,24 @@ using System.Web.Http.Cors;
 
 namespace ListPaymentService.Controllers
 {
-    public class ApprovePaymentController : Controller
+    // GET: ApprovePayment
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    public class ApprovePaymentController : ApiController
     {
-        // GET: ApprovePayment
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public class ApproveController : ApiController
+        ApproveResponse res = null;
+        [System.Web.Http.HttpPost]
+        public async Task<IHttpActionResult> MakePayment([FromBody] ApproveRequesst payment)
         {
-            ApproveResponse res = null;
-            [System.Web.Http.HttpPost]
-            public async Task<IHttpActionResult> MakePayment([FromBody] ApproveRequesst payment)
+            try
             {
-                try
-                {
-                    ApprovePayment client = new ApprovePayment();
-                    res = await client.ApprovePayments(payment);
-                }
-                catch (Exception)
-                {
-                    return StatusCode(HttpStatusCode.BadRequest);
-                }
-                return Ok(res);
+                ApprovePayment client = new ApprovePayment();
+                res = await client.ApprovePayments(payment);
             }
+            catch (Exception)
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            return Ok(res);
         }
-
-    }
+    }    
 }
